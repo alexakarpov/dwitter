@@ -4,7 +4,13 @@ from django.shortcuts import render
 from .models import Profile
 
 def dashboard(request):
-  return render(request, "dwitter/dashboard.html")
+  follows = request.user.profile.follows.all()
+  sorted_dweets = []
+  for f in follows:
+    sorted_dweets.extend(list(f.user.dweets.all()))
+
+  sorted_dweets.sort(key=lambda d: d.created_at, reverse=True)
+  return render(request, "dwitter/dashboard.html", {'dweets': sorted_dweets})
 
 def profiles(request):
   profiles = Profile.objects.exclude(user=request.user)
