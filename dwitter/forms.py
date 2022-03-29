@@ -1,7 +1,9 @@
 # dwitter/forms.py
 
 from django import forms
+
 from .models import Dweet
+
 
 class DweetForm(forms.ModelForm):
     body = forms.CharField(
@@ -17,4 +19,4 @@ class DweetForm(forms.ModelForm):
 
     class Meta:
         model = Dweet
-        exclude = ("user", ) # yeah the comma is significant, else tuple will be gone
+        exclude = ("user",)  # yeah the comma is significant, else tuple will be gone
