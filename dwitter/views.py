@@ -3,7 +3,7 @@
 from django.shortcuts import redirect, render
 
 from .forms import DweetForm
-from .models import Profile
+from .models import Dweet, Profile
 
 
 def dashboard(request):
@@ -19,10 +19,11 @@ def dashboard(request):
             print("form not valid")
 
     follows = request.user.profile.follows.all()
-    sorted_dweets = []
-    for f in follows:
-        sorted_dweets.extend(list(f.user.dweets.all()))
-    sorted_dweets.sort(key=lambda d: d.created_at, reverse=True)
+    sorted_dweets = Dweet.objects.filter(user__profile__in=request.user.profile.follows.all()).order_by("-created_at")
+
+    # for f in follows:
+    #     sorted_dweets.extend(list(f.user.dweets.all()))
+    # sorted_dweets.sort(key=lambda d: d.created_at, reverse=True)
     return render(request, "dwitter/dashboard.html", {"dweets": sorted_dweets, "form": form})
 
 
